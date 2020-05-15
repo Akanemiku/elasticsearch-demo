@@ -30,18 +30,21 @@ public class ElasticController {
     @Qualifier("restHighLevelClient")
     private RestHighLevelClient client;
 
+    private String index = "posts";
+    private String type = "doc";
+    private String id = "1";
+
+
     /**
      * 新增文档
+     *
      * @param json
      * @return
      * @throws IOException
      */
     @PutMapping("/put")
     public ResultVO putIndex(@RequestBody String json) throws IOException {
-        IndexRequest request = new IndexRequest(
-                "posts",
-                "doc",
-                "1");
+        IndexRequest request = new IndexRequest(index, type, id);
 
         System.out.println(json);
 
@@ -52,44 +55,40 @@ public class ElasticController {
 
     /**
      * 查询文档
+     *
      * @return
      * @throws IOException
      */
     @GetMapping("/get")
     public ResultVO getIndex() throws IOException {
-        GetRequest getRequest = new GetRequest(
-                "posts",
-                "doc",
-                "1");
+        GetRequest getRequest = new GetRequest(index, type, id);
         GetResponse response = client.get(getRequest);
         return ResultVOUtil.success(response.getSource());
     }
 
     /**
      * 删除文档
+     *
      * @return
      * @throws IOException
      */
     @DeleteMapping("/delete")
     public ResultVO deleteIndex() throws IOException {
-        DeleteRequest request = new DeleteRequest(
-                "posts");
+        DeleteRequest request = new DeleteRequest(index);
         DeleteResponse response = client.delete(request);
         return ResultVOUtil.success(response.toString());
     }
 
     /**
      * 修改文档
+     *
      * @param json
      * @return
      * @throws IOException
      */
     @PostMapping("/post")
     public ResultVO postIndex(@RequestBody String json) throws IOException {
-        UpdateRequest request = new UpdateRequest(
-                "posts",
-                "doc",
-                "1");
+        UpdateRequest request = new UpdateRequest(index, type, id);
 
         System.out.println(json);
 
